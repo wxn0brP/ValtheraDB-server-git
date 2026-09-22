@@ -28,13 +28,13 @@ async function main() {
 
 	console.log("Initializing git adapter...");
 	const adapter = await createGitAdapter({
+		dir: gitDir,
 		git: {
 			url: gitUrl,
 			auth: {
 				type: "token",
 				token: gitToken,
 			},
-			workdir: gitDir,
 			branch: gitBranch,
 		},
 		flusher: {
