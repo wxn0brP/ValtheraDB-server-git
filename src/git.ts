@@ -1,6 +1,7 @@
 import { Router } from "@wxn0brp/falcon-frame";
 import { execFileSync } from "child_process";
-import { mkdir, rm } from "fs/promises";
+import { readdir, rm } from "fs/promises";
+import { join } from "path";
 import { createAdapter } from "./init";
 import { gitBranch } from "./vars";
 
@@ -230,13 +231,14 @@ export function createGitRouter(gitDir: string) {
 	router.post("/reinit", async (req, res) => {
 		try {
 			console.log(`[GIT] cleaning ${gitDir}...`);
-			await rm(gitDir, {
-				recursive: true,
-				force: true,
-			});
-			await mkdir(gitDir, {
-				recursive: true,
-			});
+			const files = await readdir(gitDir);
+			for (const file of files) {
+				await rm(join(gitDir, file), {
+					force: true,
+					recursive: true,
+				});
+			}
+			console.log(`[GIT] cleaning ${gitDir} completed`);
 
 			await createAdapter();
 		} catch (err: any) {
