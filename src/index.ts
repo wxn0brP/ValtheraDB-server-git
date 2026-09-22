@@ -1,15 +1,8 @@
 import { ValtheraClass } from "@wxn0brp/db-core/db/valthera";
-import { createGitAdapter } from "@wxn0brp/db-storage-git";
 import { loadEnvFile } from "node:process";
 import { startHttp } from "./http";
-import {
-	flushDelay,
-	gitBranch,
-	gitDir,
-	gitToken,
-	gitUrl,
-	wolfToken,
-} from "./vars";
+import { createAdapter } from "./init";
+import { gitUrl, wolfToken } from "./vars";
 
 try {
 	loadEnvFile();
@@ -27,22 +20,7 @@ async function main() {
 	}
 
 	console.log("Initializing git adapter...");
-	const adapter = await createGitAdapter({
-		dir: gitDir,
-		git: {
-			url: gitUrl,
-			auth: {
-				type: "token",
-				token: gitToken,
-			},
-			branch: gitBranch,
-		},
-		flusher: {
-			delay: flushDelay,
-			autoFlush: true,
-		},
-	});
-
+	const adapter = await createAdapter();
 	console.log("Creating Valthera instance...");
 	const db = new ValtheraClass({
 		adapter,
