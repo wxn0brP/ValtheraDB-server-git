@@ -15,6 +15,9 @@ export const authMiddleware: RouteHandler = async (req, res, next) => {
 	if (!token && req.body.auth) token = req.body.auth;
 
 	if (!token) {
+		console.warn(
+			`[AUTH] Failed: no token provided from ${req.ip || "unknown"}`,
+		);
 		return res.status(401).json({
 			err: true,
 			msg: "Access denied. No token provided.",
@@ -26,6 +29,7 @@ export const authMiddleware: RouteHandler = async (req, res, next) => {
 	const provided = token.replace("_wolf_", "");
 
 	if (!wolfToken || !safeCompare(provided, wolfToken)) {
+		console.warn(`[AUTH] Failed: invalid token from ${req.ip || "unknown"}`);
 		return res.status(401).json({
 			err: true,
 			msg: "Invalid token.",

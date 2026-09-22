@@ -7,7 +7,9 @@ import http from "http";
 import https from "https";
 import { authMiddleware } from "./auth";
 import { createDbRouter } from "./db";
+import { createGitRouter } from "./git";
 import {
+	gitDir,
 	port,
 	rateLimitMax,
 	rateLimitWindow,
@@ -52,6 +54,9 @@ export function startHttp(db: ValtheraClass) {
 	const { router: dbRouter, rootHandler } = createDbRouter(db);
 	apiRouter.use("/db", dbRouter);
 	apiRouter.post("/", rootHandler);
+
+	const gitRouter = createGitRouter(gitDir);
+	apiRouter.use("/git", gitRouter);
 
 	const handler = app.getApp();
 

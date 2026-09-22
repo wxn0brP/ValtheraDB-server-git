@@ -69,6 +69,7 @@ export function createDbRouter(db: ValtheraClass) {
 				return res.e(Codes.INVALID_TYPE);
 
 			if (type === "getCollections") {
+				console.log("[OP] getCollections");
 				const collections = await db.getCollections();
 				return res.r(collections);
 			}
@@ -87,9 +88,11 @@ export function createDbRouter(db: ValtheraClass) {
 			const collection = parsedVQuery.collection as string;
 			if (!collection) return res.e(Codes.COLLECTION_REQ);
 
+			console.log(`[OP] ${type} ${collection}`);
 			const result = await dbAny[type](parsedVQuery);
 			return res.r(result);
 		} catch (err: any) {
+			console.error(`[DB] ${type} failed: ${err.message}`);
 			return res.e(err.message, 500);
 		}
 	}
