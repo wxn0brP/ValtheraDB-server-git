@@ -1,0 +1,5 @@
+{
+	"extends": [
+		"@wxn0brp/biome"
+	]
+}

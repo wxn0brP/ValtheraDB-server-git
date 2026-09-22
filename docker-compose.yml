@@ -1,0 +1,12 @@
+services:
+  valtheradb-git:
+    build: .
+    image: valtheradb-server-git
+    container_name: valtheradb-git
+    ports:
+      - "14785:14785"
+      #- "14786:14786" # HTTPS (enable when SSL_CERT and SSL_KEY are set)
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data

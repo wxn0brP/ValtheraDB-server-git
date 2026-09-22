@@ -1,0 +1,40 @@
+{
+    "name": "@wxn0brp/db-server-git",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "description": "Lightweight ValtheraDB server with git adapter",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wxn0brP/ValtheraDB-server-git.git"
+    },
+    "homepage": "https://github.com/wxn0brP/ValtheraDB-server-git",
+    "keywords": [
+        "database",
+        "file-based",
+        "CRUD",
+        "git",
+        "server"
+    ],
+    "author": "wxn0brP",
+    "license": "MIT",
+    "type": "module",
+    "dependencies": {
+        "@wxn0brp/db": "^0.120.0",
+        "@wxn0brp/db-core": "^0.12.3",
+        "@wxn0brp/db-storage-dir": "^0.120.2",
+        "@wxn0brp/db-storage-git": "^0.0.1",
+        "@wxn0brp/falcon-frame": "^0.9.3",
+        "@wxn0brp/falcon-frame-plugin": "^0.0.6",
+        "@wxn0brp/wts-run-fn": "github:wxn0brp/ts-shared#dist-run-fn",
+        "dotenv": "^18.0.2"
+    },
+    "devDependencies": {
+        "@types/bun": "*",
+        "@wxn0brp/biome": "*",
+        "tsc-alias": "^1",
+        "typescript": "^7"
+    },
+    "scripts": {
+        "build": "tsc && tsc-alias"
+    }
+}
