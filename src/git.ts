@@ -1,8 +1,8 @@
 import { Router } from "@wxn0brp/falcon-frame";
 import { execFileSync } from "child_process";
-import { rmSync } from "fs";
-import { gitBranch } from "./vars";
+import { mkdir, rm } from "fs/promises";
 import { createAdapter } from "./init";
+import { gitBranch } from "./vars";
 
 export function createGitRouter(gitDir: string) {
 	const router = new Router();
@@ -230,14 +230,17 @@ export function createGitRouter(gitDir: string) {
 	router.post("/reinit", async (req, res) => {
 		try {
 			console.log(`[GIT] cleaning ${gitDir}...`);
-			rmSync(gitDir, {
+			await rm(gitDir, {
 				recursive: true,
 				force: true,
+			});
+			await mkdir(gitDir, {
+				recursive: true,
 			});
 
 			await createAdapter();
 		} catch (err: any) {
-			console.error(`[GIT] reclone failed: ${err.message}`);
+			console.error(`[GIT] reinit failed: ${err.message}`);
 			res.status(500).json({
 				err: true,
 				msg: err.message,
