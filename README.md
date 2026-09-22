@@ -3,7 +3,7 @@
 Lightweight ValtheraDB server with git-backed storage.
 Database files live in a Git repository, every flush creates a commit and pushes it to the configured branch.
 
-Based on [ValtheraDB](https://github.com/wxn0brP/ValtheraDB) and the [git storage adapter](https://github.com/wxn0brP/ValtheraDB/tree/master/low/git).
+Based on [ValtheraDB](https://github.com/wxn0brP/ValtheraDB) and the [git storage adapter](https://github.com/wxn0brP/ValtheraDB-storage-git).
 
 ## Features
 
