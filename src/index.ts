@@ -1,19 +1,19 @@
-import { configDotenv } from "dotenv";
 import { ValtheraClass } from "@wxn0brp/db-core/db/valthera";
 import { createGitAdapter } from "@wxn0brp/db-storage-git";
+import { loadEnvFile } from "node:process";
 import { startHttp } from "./http";
 import {
-	wolfToken,
-	gitUrl,
-	gitBranch,
-	gitToken,
-	gitDir,
 	flushDelay,
+	gitBranch,
+	gitDir,
+	gitToken,
+	gitUrl,
+	wolfToken,
 } from "./vars";
 
-configDotenv({
-	quiet: true,
-});
+try {
+	loadEnvFile();
+} catch {}
 
 async function main() {
 	if (!wolfToken) {

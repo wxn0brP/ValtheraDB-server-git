@@ -25,8 +25,7 @@
         "@wxn0brp/db-storage-git": "^0.0.1",
         "@wxn0brp/falcon-frame": "^0.9.3",
         "@wxn0brp/falcon-frame-plugin": "^0.0.6",
-        "@wxn0brp/wts-run-fn": "github:wxn0brp/ts-shared#dist-run-fn",
-        "dotenv": "^18.0.2"
+        "@wxn0brp/wts-run-fn": "github:wxn0brp/ts-shared#dist-run-fn"
     },
     "devDependencies": {
         "@types/bun": "*",

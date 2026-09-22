@@ -9,7 +9,10 @@
 		"outDir": "./dist",
 		"declaration": true,
 		"rootDir": "./src",
-		"strict": false
+		"strict": false,
+		"types": [
+			"bun-types"
+		]
 	},
 	"include": [
         "./src"
