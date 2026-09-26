@@ -96,7 +96,7 @@ export function createDbRouter(db: ValtheraClass) {
 	router.post("/:type", async (req, res) => {
 		const result = await dbLogic({
 			type: req.params.type,
-			query: req.query,
+			query: req.body.query,
 			keys: req.body.keys || [],
 		});
 		result.ff(res);
@@ -108,7 +108,7 @@ export function createDbRouter(db: ValtheraClass) {
 			type: req.params.type,
 			query: {
 				collection,
-				...req.query,
+				...req.body.query,
 			},
 			keys: req.body.keys || [],
 		});
@@ -120,7 +120,7 @@ export function createDbRouter(db: ValtheraClass) {
 		rootHandler: async (req: any, res: any) => {
 			const result = await dbLogic({
 				type: req.body.op,
-				query: req.query,
+				query: req.body.query,
 				keys: req.body.keys || [],
 			});
 			result.ff(res);
