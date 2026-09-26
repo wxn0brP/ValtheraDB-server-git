@@ -81,12 +81,9 @@ export function createDbRouter(db: ValtheraClass) {
 
 			const parsedVQuery = deserializeFunctions(query, keys || []) as VQuery;
 
-			const collection = parsedVQuery.collection as string;
-			if (!collection) return res.e(Codes.COLLECTION_REQ);
+			if (!isPathSafe(query.collection)) return res.e(Codes.INVALID_COLLECTION);
 
-			if (!isPathSafe(collection)) return res.e(Codes.INVALID_COLLECTION);
-
-			console.log(`[OP] ${type} ${collection}`);
+			console.log(`[OP] ${type} ${query.collection}`);
 
 			const result = await dbAny[type](parsedVQuery);
 			return res.r(result);
