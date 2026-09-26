@@ -1,7 +1,7 @@
+import type { ValtheraClass } from "@wxn0brp/db-core/db/valthera";
 import { VQuery } from "@wxn0brp/db-core/types/query";
 import { FFResponse, Router } from "@wxn0brp/falcon-frame";
 import { deserializeFunctions } from "@wxn0brp/wts-run-fn";
-import type { ValtheraClass } from "@wxn0brp/db-core/db/valthera";
 
 export interface Query {
 	type: string;
@@ -42,23 +42,24 @@ export class Response {
 export enum Codes {
 	TYPE_REQ = "type is required",
 	INVALID_TYPE = "invalid type",
-	PARAMS_REQ = "params is required",
+	ACCESS_DENIED = "access denied",
+	QUERY_REQ = "query is required",
+	QUERY_REQ_OBJ = "query must be an object",
 	COLLECTION_REQ = "collection is required",
+	INVALID_COLLECTION = "invalid collection",
+}
+
+function isPathSafe(collection: string) {
+	if (collection.startsWith("..")) return false;
+	if (collection.startsWith("/")) return false;
+	return true;
 }
 
 export function createDbRouter(db: ValtheraClass) {
 	const router = new Router();
 
-	function getQuery(req: any) {
-		const { query, params } = req.body;
-		if (query) return query;
-		if (params) return {};
-		const data = Array.isArray(params) ? params[0] : params;
-		return data || {};
-	}
-
-	async function dbLogic(query: Query): Promise<Response> {
-		const { type, query: params, keys } = query;
+	async function dbLogic(serverQuery: Query): Promise<Response> {
+		const { type, query, keys } = serverQuery;
 		const res = new Response();
 
 		if (!type) return res.e(Codes.TYPE_REQ);
@@ -74,19 +75,17 @@ export function createDbRouter(db: ValtheraClass) {
 				return res.r(collections);
 			}
 
-			if (!params || typeof params !== "object" || !params.collection)
-				return res.e(Codes.PARAMS_REQ);
+			if (!query) return res.e(Codes.QUERY_REQ);
+			if (typeof query !== "object") return res.e(Codes.QUERY_REQ_OBJ);
+			if (!query.collection) return res.e(Codes.COLLECTION_REQ);
 
-			const parsedParams = deserializeFunctions(
-				[
-					params,
-				],
-				keys || [],
-			);
+			const parsedParams = deserializeFunctions(query, keys || []);
 			const parsedVQuery = parsedParams[0] as VQuery;
 
 			const collection = parsedVQuery.collection as string;
 			if (!collection) return res.e(Codes.COLLECTION_REQ);
+
+			if (!isPathSafe(collection)) return res.e(Codes.INVALID_COLLECTION);
 
 			console.log(`[OP] ${type} ${collection}`);
 
@@ -101,7 +100,7 @@ export function createDbRouter(db: ValtheraClass) {
 	router.post("/:type", async (req, res) => {
 		const result = await dbLogic({
 			type: req.params.type,
-			query: getQuery(req),
+			query: req.query,
 			keys: req.body.keys || [],
 		});
 		result.ff(res);
@@ -113,7 +112,7 @@ export function createDbRouter(db: ValtheraClass) {
 			type: req.params.type,
 			query: {
 				collection,
-				...getQuery(req),
+				...req.query,
 			},
 			keys: req.body.keys || [],
 		});
@@ -125,7 +124,7 @@ export function createDbRouter(db: ValtheraClass) {
 		rootHandler: async (req: any, res: any) => {
 			const result = await dbLogic({
 				type: req.body.op,
-				query: getQuery(req),
+				query: req.query,
 				keys: req.body.keys || [],
 			});
 			result.ff(res);
