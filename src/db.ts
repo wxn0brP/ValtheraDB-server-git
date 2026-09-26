@@ -49,6 +49,12 @@ export enum Codes {
 	INVALID_COLLECTION = "invalid collection",
 }
 
+const collectionOp = new Set([
+	"ensureCollection",
+	"issetCollection",
+	"removeCollection",
+]);
+
 function isPathSafe(collection: string) {
 	if (collection.startsWith("..")) return false;
 	if (collection.startsWith("/")) return false;
@@ -84,6 +90,11 @@ export function createDbRouter(db: ValtheraClass) {
 			if (!isPathSafe(query.collection)) return res.e(Codes.INVALID_COLLECTION);
 
 			console.log(`[OP] ${type} ${query.collection}`);
+
+			if (collectionOp.has(type)) {
+				const result = await dbAny[type](parsedVQuery.collection);
+				return res.r(result);
+			}
 
 			const result = await dbAny[type](parsedVQuery);
 			return res.r(result);
