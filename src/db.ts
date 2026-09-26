@@ -89,6 +89,7 @@ export function createDbRouter(db: ValtheraClass) {
 			if (!collection) return res.e(Codes.COLLECTION_REQ);
 
 			console.log(`[OP] ${type} ${collection}`);
+
 			const result = await dbAny[type](parsedVQuery);
 			return res.r(result);
 		} catch (err: any) {

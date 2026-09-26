@@ -8,5 +8,3 @@ services:
       #- "14786:14786" # HTTPS (enable when SSL_CERT and SSL_KEY are set)
     env_file:
       - .env
-    volumes:
-      - ./data:/app/data
