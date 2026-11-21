@@ -21,7 +21,7 @@
     "dependencies": {
         "@wxn0brp/db": "^0.120.6",
         "@wxn0brp/db-core": "^0.12.14",
-        "@wxn0brp/db-storage-dir": "^0.120.8",
+        "@wxn0brp/db-storage-dir": "^0.121.0",
         "@wxn0brp/db-storage-git": "^0.0.6",
         "@wxn0brp/falcon-frame": "^0.9.9",
         "@wxn0brp/falcon-frame-plugin": "^0.0.7",
